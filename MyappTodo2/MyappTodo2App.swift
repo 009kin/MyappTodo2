@@ -2,7 +2,7 @@
 //  MyappTodo2App.swift
 //  MyappTodo2
 //
-//  Created by 中村駿也 on 2023/01/28.
+//  Created by 009kin on 2023/01/28.
 //
 
 import SwiftUI

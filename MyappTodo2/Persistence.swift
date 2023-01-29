@@ -2,7 +2,7 @@
 //  Persistence.swift
 //  MyappTodo2
 //
-//  Created by 中村駿也 on 2023/01/28.
+//  Created by 009kin on 2023/01/28.
 //
 
 import CoreData
@@ -13,10 +13,16 @@ struct PersistenceController {
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-        }
+
+        ///preview用初期データ
+        let newTodo = Todo(context: viewContext)
+        newTodo.timestamp = Date()
+        newTodo.checked = false
+        newTodo.task = "タスク名"
+        newTodo.content = ""
+        newTodo.deadline = Date()
+        newTodo.id = UUID()
+        
         do {
             try viewContext.save()
         } catch {

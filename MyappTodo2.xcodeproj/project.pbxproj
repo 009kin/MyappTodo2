@@ -13,6 +13,9 @@
 		2C618EDB29850BEE007358F6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C618EDA29850BEE007358F6 /* Preview Assets.xcassets */; };
 		2C618EDD29850BEE007358F6 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C618EDC29850BEE007358F6 /* Persistence.swift */; };
 		2C618EE029850BEE007358F6 /* MyappTodo2.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2C618EDE29850BEE007358F6 /* MyappTodo2.xcdatamodeld */; };
+		2C618EE829850D30007358F6 /* Todo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C618EE629850D30007358F6 /* Todo+CoreDataClass.swift */; };
+		2C618EE929850D30007358F6 /* Todo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C618EE729850D30007358F6 /* Todo+CoreDataProperties.swift */; };
+		2C618EEB298569AD007358F6 /* UpdateTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C618EEA298569AC007358F6 /* UpdateTaskView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +26,9 @@
 		2C618EDA29850BEE007358F6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2C618EDC29850BEE007358F6 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		2C618EDF29850BEE007358F6 /* MyappTodo2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyappTodo2.xcdatamodel; sourceTree = "<group>"; };
+		2C618EE629850D30007358F6 /* Todo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Todo+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2C618EE729850D30007358F6 /* Todo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Todo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		2C618EEA298569AC007358F6 /* UpdateTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateTaskView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +45,8 @@
 		2C618EC729850BE6007358F6 = {
 			isa = PBXGroup;
 			children = (
+				2C618EE629850D30007358F6 /* Todo+CoreDataClass.swift */,
+				2C618EE729850D30007358F6 /* Todo+CoreDataProperties.swift */,
 				2C618ED229850BE6007358F6 /* MyappTodo2 */,
 				2C618ED129850BE6007358F6 /* Products */,
 			);
@@ -57,6 +65,7 @@
 			children = (
 				2C618ED329850BE6007358F6 /* MyappTodo2App.swift */,
 				2C618ED529850BE6007358F6 /* ContentView.swift */,
+				2C618EEA298569AC007358F6 /* UpdateTaskView.swift */,
 				2C618ED729850BEE007358F6 /* Assets.xcassets */,
 				2C618EDC29850BEE007358F6 /* Persistence.swift */,
 				2C618EDE29850BEE007358F6 /* MyappTodo2.xcdatamodeld */,
@@ -146,7 +155,10 @@
 				2C618EDD29850BEE007358F6 /* Persistence.swift in Sources */,
 				2C618ED629850BE6007358F6 /* ContentView.swift in Sources */,
 				2C618EE029850BEE007358F6 /* MyappTodo2.xcdatamodeld in Sources */,
+				2C618EEB298569AD007358F6 /* UpdateTaskView.swift in Sources */,
+				2C618EE829850D30007358F6 /* Todo+CoreDataClass.swift in Sources */,
 				2C618ED429850BE6007358F6 /* MyappTodo2App.swift in Sources */,
+				2C618EE929850D30007358F6 /* Todo+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

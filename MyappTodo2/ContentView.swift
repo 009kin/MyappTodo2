@@ -1,85 +1,112 @@
 //
 //  ContentView.swift
-//  MyappTodo2
+//  MyappTodo
 //
-//  Created by 中村駿也 on 2023/01/28.
+//  Created by 009kin on 2023/01/28.
 //
 
 import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
+    ///被管理オブジェクトコンテキストの取得
+    @Environment(\.managedObjectContext) private var context
 
+    ///データ取得処理
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
+        entity: Todo.entity(),
+        sortDescriptors: [NSSortDescriptor(keyPath: \Todo.timestamp, ascending: true)],
+        predicate: nil)
+    private var todos: FetchedResults<Todo>
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
+                ForEach(todos) { todo in
+                    HStack {
+                        Image(systemName: todo.checked ? "checkmark.circle.fill" : "circle")
+                            .onTapGesture {
+                                todo.checked.toggle()
+                                try? context.save()
+                            }
+                        NavigationLink {
+                            UpdateTaskView(todo: todo)
+                        } label: {
+                            Text("\(todo.task!)")
+                        }
+                        Spacer()
                     }
                 }
-                .onDelete(perform: deleteItems)
+                .onDelete(perform: deleteTodos)
             }
+            .navigationBarTitle("ToDoリスト")
+            
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .navigationBarLeading) {
                     EditButton()
                 }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: AddTodoView()) {
+                    Image(systemName: "plus")
                     }
                 }
             }
-            Text("Select an item")
         }
     }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+    ///タスクの削除
+    func deleteTodos(offsets: IndexSet) {
+        for index in offsets {
+            context.delete(todos[index])
+        }
+        try? context.save()
+    }
+}
 
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+///タスク追加View
+struct AddTodoView: View {
+    @Environment(\.managedObjectContext) private var context
+    @Environment(\.presentationMode) var presentationMode
+    @State private var task = ""
+    @State private var content = ""
+    @State private var date = Date()
+    
+    var body: some View {
+        Form {
+            Section() {
+                TextField("タスクを入力", text: $task)
+            } header: {
+                Text("タスク名")
             }
+            DatePicker("日付を選択", selection: $date, displayedComponents: .date)
+ 
+            Section() {
+                TextField("タスク内容を入力", text: $content)
+            } header: {
+                Text("タスク内容")
+            }
+            
         }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        .navigationTitle("タスク追加")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("保存") {
+                    /// タスク新規登録処理
+                    let newTodo = Todo(context: context)
+                    newTodo.timestamp = Date()
+                    newTodo.checked = false
+                    newTodo.task = task
+                    newTodo.deadline = date
+                    
+                    try? context.save()
+ 
+                    /// 現在のViewを閉じる
+                    presentationMode.wrappedValue.dismiss()
+                }
             }
         }
     }
 }
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
