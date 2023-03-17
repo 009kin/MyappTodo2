@@ -9,8 +9,8 @@ import SwiftUI
 import CoreData
 
 struct UpdateTaskView: View {
-    
     @Environment(\.managedObjectContext) private var context
+    @Environment(\.presentationMode) var presentationMode
     @State private var task = ""
     @State private var content = ""
     @State private var deadline = Date()
@@ -19,9 +19,9 @@ struct UpdateTaskView: View {
     
     init(todo: Todo) {
         self.todo = todo
-        self.task = todo.task ?? ""
-        self.content = todo.content ?? ""
-        self.deadline = todo.deadline ?? Date()
+        _task = State(initialValue: todo.task ?? "")
+        _content = State(initialValue: todo.content ?? "")
+        _deadline = State(initialValue: todo.deadline ?? Date())
     }
     
     var body: some View {
@@ -41,22 +41,33 @@ struct UpdateTaskView: View {
                 }
                 
             }
-            .navigationTitle("タスク編集")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("保存") {
-                        /// タスク編集処理
-                        todo.task = task
-                        todo.content = content
-                        todo.timestamp = Date()
-                        todo.checked = false
-                        todo.deadline = date
-                        
-                        try? context.save()
-                    }
-                }
+            .onAppear {
+                task = todo.task ?? ""
+                deadline = todo.deadline ?? Date()
+                content = todo.content ?? ""
             }
+            .navigationTitle("タスク編集")
+            .navigationBarItems(
+                leading: Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    Text("キャンセル")
+                },
+                trailing: Button(action: {
+                    saveTask()
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    Text("保存")
+                }.disabled(task.isEmpty)
+            )
         }
+    }
+    
+    func saveTask() {
+        todo.task = task
+        todo.deadline = deadline
+        todo.content = content
+        try? context.save()
     }
 }
 

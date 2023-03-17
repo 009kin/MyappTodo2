@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    ///被管理オブジェクトコンテキストの取得
+    ///CoreDataのcontextを取得
     @Environment(\.managedObjectContext) private var context
 
     ///データ取得処理
@@ -34,7 +34,6 @@ struct ContentView: View {
                         } label: {
                             Text("\(todo.task!)")
                         }
-                        Spacer()
                     }
                 }
                 .onDelete(perform: deleteTodos)
@@ -69,42 +68,43 @@ struct AddTodoView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var task = ""
     @State private var content = ""
-    @State private var date = Date()
+    @State private var deadline = Date()
     
     var body: some View {
         Form {
-            Section() {
+            Section(header: Text("タスクを入力")) {
                 TextField("タスクを入力", text: $task)
-            } header: {
-                Text("タスク名")
             }
-            DatePicker("日付を選択", selection: $date, displayedComponents: .date)
- 
-            Section() {
+            Section(header: Text("期限")) {
+                DatePicker("日付を選択", selection: $deadline, displayedComponents: .date)
+            }
+            Section(header: Text("タスク内容")) {
                 TextField("タスク内容を入力", text: $content)
-            } header: {
-                Text("タスク内容")
             }
             
         }
         .navigationTitle("タスク追加")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("保存") {
-                    /// タスク新規登録処理
-                    let newTodo = Todo(context: context)
-                    newTodo.timestamp = Date()
-                    newTodo.checked = false
-                    newTodo.task = task
-                    newTodo.deadline = date
-                    
-                    try? context.save()
- 
-                    /// 現在のViewを閉じる
-                    presentationMode.wrappedValue.dismiss()
-                }
-            }
-        }
+        .navigationBarItems(
+            leading: Button(action: {
+                presentationMode.wrappedValue.dismiss()
+            }) {
+                Text("キャンセル")
+            },
+            trailing: Button(action: {
+                addTask()
+                presentationMode.wrappedValue.dismiss()
+            }) {
+                Text("保存")
+            }.disabled(task.isEmpty)
+        )
+    }
+    
+    func addTask() {
+        let todo = Todo(context: context)
+        todo.task = task
+        todo.deadline = deadline
+        todo.content = content
+        try? context.save()
     }
 }
 
